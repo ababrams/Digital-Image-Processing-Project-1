@@ -1,5 +1,5 @@
 /**
- * 
+ * Processes command line arguments
  * @author Alicia Abrams
  *
  */
