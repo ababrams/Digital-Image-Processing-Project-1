@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * GUI for Image Browsing
+ * GUI for Image Browsing 
  * 
  * @author Alicia Abrams, Corwin Lipkin
  *
