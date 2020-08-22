@@ -2,15 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
- * GUI for Image Browsing 
+ * GUI for Image Browsing
  * 
- * @author Alicia Abrams
+ * @author Alicia Abrams, Corwin Lipkin
  *
  */
 
-public class ImageGUI extends JFrame implements ActionListener {
+public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 	private JButton submitDirectory;
 	private JPanel topPanel;
@@ -60,6 +62,12 @@ public class ImageGUI extends JFrame implements ActionListener {
 		bottomPanel.add(previous);
 		bottomPanel.add(next);
 
+		this.addKeyListener(this);
+		this.setFocusable(true);
+		submitDirectory.addKeyListener(this);
+		submitDirectory.setFocusable(true);
+		imagePanel.addKeyListener(this);
+		imagePanel.setFocusable(true);
 		submitDirectory.addActionListener(this);
 		previous.addActionListener(this);
 		next.addActionListener(this);
@@ -132,4 +140,26 @@ public class ImageGUI extends JFrame implements ActionListener {
 		return true;
 	}
 
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyChar() == 'n' || e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode()== KeyEvent.VK_RIGHT) {
+			image.nextImage();
+			setImage();
+		}
+
+		if (e.getKeyChar() == 'p' || e.getKeyCode()== KeyEvent.VK_LEFT) {
+			image.previousImage();
+			setImage();
+		}
+
+		if (e.getKeyChar() == 'q' || e.getKeyCode()== KeyEvent.VK_ESCAPE) {
+			System.exit(0);
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
+	
+	@Override
+	public void keyTyped(KeyEvent a) {}
 }

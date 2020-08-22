@@ -7,9 +7,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
+//import org.opencv.core.Core;
+//import org.opencv.core.Mat;
+//import org.opencv.imgcodecs.Imgcodecs;
 
 /**
  * Creates an array of file names.
@@ -18,14 +18,14 @@ import org.opencv.imgcodecs.Imgcodecs;
  *
  */
 public class AcquireImage {
-	private List<Mat> matImages;
+//	private List<Mat> matImages;
 	private List<File> files;
 	private List<BufferedImage> images;
 	private int currentIndex = 0;
 
 	public AcquireImage(String directoryName, int yAxis, int xAxis) {
 		images = new ArrayList<>();
-		matImages = new ArrayList<>();
+//		matImages = new ArrayList<>();
 		files = new ArrayList<>();
 		try {
 			File traverseDir = new File(directoryName);
@@ -68,12 +68,12 @@ public class AcquireImage {
 	 * 
 	 * @param imageNames
 	 */
-	public void readFiles() {
-		for (File file : files) {
-			Mat img = Imgcodecs.imread(file.getAbsolutePath());
-			matImages.add(img);
-		}
-	}
+//	public void readFiles() {
+//		for (File file : files) {
+//			Mat img = Imgcodecs.imread(file.getAbsolutePath());
+//			matImages.add(img);
+//		}
+//	}
 
 	/**
 	 * goes to the previous image
