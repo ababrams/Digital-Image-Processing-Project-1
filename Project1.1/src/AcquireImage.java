@@ -108,4 +108,16 @@ public class AcquireImage {
 	public List<BufferedImage> getImages() {
 		return images;
 	}
+	
+	public File getFile() {
+		if (!files.isEmpty()) {
+			return files.get(currentIndex);
+		} else {
+			return null;
+		}
+	}
+	
+	public List<File> getFiles(){
+		return files;
+	}
 }

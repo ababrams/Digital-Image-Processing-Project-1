@@ -91,7 +91,64 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	 * Displays current image in GUI
 	 */
 	public void setImage() {
-		imageLabel.setIcon(new ImageIcon(image.getImage()));
+		BufferedImage bufImage = image.getImage();
+		
+		// if statement for image if over 600 width or 800 height
+		// IDE should make you surround in try catch
+		// BufferedImage atImage = affineTransform(bufImage);
+		
+		imageLabel.setIcon(new ImageIcon(bufImage));
+		System.out.println(image.getFile() + " " + bufImage.getHeight() + "x" + bufImage.getWidth() );
+	}
+	
+	/**
+	 * Returns image at reduced size
+	 * @param image
+	 * @return 
+	 * @throws IOException
+	 */
+	public BufferedImage affineTransform(BufferedImage image) throws IOException {
+		// create byte array from buffered image
+		byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+
+		// create matrix empty matrix size of image
+		Mat convert = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
+			    
+		// add image to matrix
+		convert.put(0, 0, pixels);
+		
+		// empty matrix for transformed image
+		Mat transform = new Mat();
+		
+		// coordinate points for original image
+	    Point p1 = new Point( 0,0 );
+	    Point p2 = new Point( convert.cols() - 1, 0 );
+	    Point p3 = new Point( 0, convert.rows() - 1 );
+	    
+	    // coordinate points for transformed image, currently set to reduce 50%
+	    Point p4 = new Point(0,0);
+	    Point p5 = new Point( convert.cols()*0.5,0);
+	    Point p6 = new Point( 0, convert.rows()*0.5 );
+	    
+	    // setting the two sets of coordinates
+	    MatOfPoint2f ma1 = new MatOfPoint2f(p1,p2,p3);
+	    MatOfPoint2f ma2 = new MatOfPoint2f(p4,p5,p6);
+	    
+	    // transform
+	    Mat tranformMatrix = Imgproc.getAffineTransform(ma1,ma2);
+	    	    
+	    // transforming image
+	    Imgproc.warpAffine(convert, transform, tranformMatrix, convert.size());
+		
+		MatOfByte matOfByte = new MatOfByte();
+		Imgcodecs.imencode(".jpeg", transform, matOfByte);
+		
+		byte[] byteArray = matOfByte.toArray();
+				
+		InputStream in = new ByteArrayInputStream(byteArray);
+		image = ImageIO.read(in);
+		
+		return image;
 	}
 
 	/**
