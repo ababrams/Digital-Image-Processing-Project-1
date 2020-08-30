@@ -1,9 +1,26 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * GUI for Image Browsing 
@@ -93,9 +110,14 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	public void setImage() {
 		BufferedImage bufImage = image.getImage();
 		
-		// if statement for image if over 600 width or 800 height
-		// IDE should make you surround in try catch
-		// BufferedImage atImage = affineTransform(bufImage);
+		if(bufImage.getWidth() > 600 || bufImage.getHeight() > 800) {
+			try {
+				bufImage = affineTransform(bufImage);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		imageLabel.setIcon(new ImageIcon(bufImage));
 		System.out.println(image.getFile() + " " + bufImage.getHeight() + "x" + bufImage.getWidth() );
@@ -108,6 +130,7 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	 * @throws IOException
 	 */
 	public BufferedImage affineTransform(BufferedImage image) throws IOException {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		// create byte array from buffered image
 		byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
 
@@ -136,9 +159,11 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	    
 	    // transform
 	    Mat tranformMatrix = Imgproc.getAffineTransform(ma1,ma2);
+	    
+	    Size size = new Size(convert.cols()*0.5, convert.rows()*0.5);
 	    	    
 	    // transforming image
-	    Imgproc.warpAffine(convert, transform, tranformMatrix, convert.size());
+	    Imgproc.warpAffine(convert, transform, tranformMatrix, size);
 		
 		MatOfByte matOfByte = new MatOfByte();
 		Imgcodecs.imencode(".jpeg", transform, matOfByte);
