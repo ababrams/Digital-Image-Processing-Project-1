@@ -136,6 +136,17 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 
 		// create matrix empty matrix size of image
 		Mat convert = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
+		
+		double ratio = 1.0;
+		
+		//determine percentage of transform maintaining aspect ratio
+		if (convert.cols() > xAxis){
+			ratio = (double)xAxis / (double)convert.cols();
+		}
+		
+		if (convert.rows() > yAxis) {
+			ratio = (double)yAxis / (double)convert.rows();
+		}
 			    
 		// add image to matrix
 		convert.put(0, 0, pixels);
@@ -150,8 +161,8 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	    
 	    // coordinate points for transformed image, currently set to reduce 50%
 	    Point p4 = new Point(0,0);
-	    Point p5 = new Point( convert.cols()*0.5,0);
-	    Point p6 = new Point( 0, convert.rows()*0.5 );
+	    Point p5 = new Point( convert.cols()*ratio,0);
+	    Point p6 = new Point( 0, convert.rows()*ratio );
 	    
 	    // setting the two sets of coordinates
 	    MatOfPoint2f ma1 = new MatOfPoint2f(p1,p2,p3);
@@ -160,7 +171,7 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	    // transform
 	    Mat tranformMatrix = Imgproc.getAffineTransform(ma1,ma2);
 	    
-	    Size size = new Size(convert.cols()*0.5, convert.rows()*0.5);
+	    Size size = new Size(convert.cols()*ratio, convert.rows()*ratio);
 	    	    
 	    // transforming image
 	    Imgproc.warpAffine(convert, transform, tranformMatrix, size);
