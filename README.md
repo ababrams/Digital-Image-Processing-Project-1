@@ -16,9 +16,11 @@ javac -cp /home/corwin/opencv_build/opencv/build/bin/opencv-440.jar:. Browser.ja
 
 To run:
 
-java -cp /C:/ ... file path to open cv jar:. -Djava.library.path=/C:/ ... path to open cv library Browser
+java -cp /C:/ ... file path to open cv jar:. -Djava.library.path=/C:/ ... path to open cv library Browser 
 
 example: (personal using Ubuntu)
 java -cp /home/corwin/opencv_build/opencv/build/bin/opencv-440.jar:.  -Djava.library.path=/home/corwin/opencv_build/opencv/build/lib/ Browser
 
-The GUI is completely usable to define the directory and the size of the columns and rows. These can also be set through command line arguments.
+The GUI is completely usable to define the directory and the size of the columns and rows. These can also be set through command line arguments as follows
+
+browser -r numrows -c numcols dir
