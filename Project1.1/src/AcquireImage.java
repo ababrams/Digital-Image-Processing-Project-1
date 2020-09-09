@@ -1,4 +1,3 @@
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class AcquireImage {
 //	private List<Mat> matImages;
 	private List<File> files;
 	private List<BufferedImage> images;
-	private int currentIndex = 0;
+	static int currentIndex = 0;
 
 	public AcquireImage(String directoryName, int yAxis, int xAxis) {
 		images = new ArrayList<>();
@@ -104,10 +103,6 @@ public class AcquireImage {
 			return null;
 		}
 	}
-
-	public List<BufferedImage> getImages() {
-		return images;
-	}
 	
 	public File getFile() {
 		if (!files.isEmpty()) {
@@ -115,6 +110,10 @@ public class AcquireImage {
 		} else {
 			return null;
 		}
+	}
+
+	public List<BufferedImage> getImages() {
+		return images;
 	}
 	
 	public List<File> getFiles(){

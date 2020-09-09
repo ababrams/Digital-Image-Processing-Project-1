@@ -98,19 +98,20 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	public ImageGUI(String dir, int row, int col) {
 		this();
 		directoryName = dir;
-		xAxis = row;
-		yAxis = col;
+		xAxis = col;
+		yAxis = row;
 		image = new AcquireImage(directoryName, yAxis, xAxis);
 		setImage();
 	}
 
 	/**
 	 * Displays current image in GUI
+	 * Prints directory location and size of image
 	 */
 	public void setImage() {
 		BufferedImage bufImage = image.getImage();
 		
-		if(bufImage.getWidth() > 600 || bufImage.getHeight() > 800) {
+		if(bufImage.getWidth() > xAxis || bufImage.getHeight() > yAxis) {
 			try {
 				bufImage = affineTransform(bufImage);
 			} catch (IOException e) {
@@ -118,9 +119,9 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 				e.printStackTrace();
 			}
 		}
-		
+				
 		imageLabel.setIcon(new ImageIcon(bufImage));
-		System.out.println(image.getFile() + " " + bufImage.getHeight() + "x" + bufImage.getWidth() );
+		System.out.println(AcquireImage.currentIndex + " " + image.getFile() + " " + bufImage.getHeight() + "x" + bufImage.getWidth() );
 	}
 	
 	/**
@@ -140,13 +141,18 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 		double ratio = 1.0;
 		
 		//determine percentage of transform maintaining aspect ratio
-		if (convert.cols() > xAxis){
-			ratio = (double)xAxis / (double)convert.cols();
+		if(convert.cols() > convert.rows()) {
+			if (convert.cols() > xAxis){
+				ratio = (double)xAxis / (double)convert.cols();
+			}
+		}else {
+			if (convert.rows() > yAxis) {
+				ratio = (double)yAxis / (double)convert.rows();
+			}
 		}
 		
-		if (convert.rows() > yAxis) {
-			ratio = (double)yAxis / (double)convert.rows();
-		}
+		
+		
 			    
 		// add image to matrix
 		convert.put(0, 0, pixels);
@@ -172,7 +178,7 @@ public class ImageGUI extends JFrame implements ActionListener, KeyListener {
 	    Mat tranformMatrix = Imgproc.getAffineTransform(ma1,ma2);
 	    
 	    Size size = new Size(convert.cols()*ratio, convert.rows()*ratio);
-	    	    
+	    	    	    
 	    // transforming image
 	    Imgproc.warpAffine(convert, transform, tranformMatrix, size);
 		
